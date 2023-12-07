@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+  labels:
+    app: test
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+        tier: test
+    spec:
+      containers:
+      - name: test
+        image: haeun161/test:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          name: test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test
+  labels:
+    app: test
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: test
+    tier: test
+  type: LoadBalancer
